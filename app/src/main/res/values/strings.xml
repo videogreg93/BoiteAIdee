@@ -5,4 +5,11 @@
     <string name="navigation_drawer_close">Close navigation drawer</string>
 
     <string name="action_settings">Settings</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="votre_idee_new_idea">Votre idée</string>
+    <string name="ajouter_idee_new_idea">Ajouter L\'idée</string>
+    <string name="main_button">Trouver une Idée!</string>
+    <string name="drawer_idea_list">Voire liste d\'idées</string>
 </resources>
