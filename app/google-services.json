@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "1024843667204",
+    "firebase_url": "https://boite-a-idee-5d291.firebaseio.com",
+    "project_id": "boite-a-idee-5d291",
+    "storage_bucket": "boite-a-idee-5d291.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1024843667204:android:63775a5e4ede8bed",
+        "android_client_info": {
+          "package_name": "gregoryfournier.boiteaidee"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1024843667204-44sgcvs61o0fhftjt1hf071scm9fksuo.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "gregoryfournier.boiteaidee",
+            "certificate_hash": "680a89eebdbb2cf96c1a5ce4c62bf7310135bc4f"
+          }
+        },
+        {
+          "client_id": "1024843667204-t6jj0vggkrhvj4ico7ja4206d6qqq44m.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCDItsCJwapYvniAxYrVCas6TNjIPR5HfY"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1024843667204-t6jj0vggkrhvj4ico7ja4206d6qqq44m.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

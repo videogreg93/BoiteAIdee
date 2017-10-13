@@ -48,5 +48,14 @@ public class AllIdeasFragment extends Fragment {
                 // TODO something here gosh I dont know what
             }
         });
+
+        // make it so the list updates when new ideas come in
+        IdeasManager.setAdapterForChanges(ideaAdapter);
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        IdeasManager.setAdapterForChanges(null);
     }
 }
