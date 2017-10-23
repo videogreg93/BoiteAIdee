@@ -5,6 +5,7 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -58,7 +59,7 @@ public class MainFragment extends Fragment {
                 }).setNegativeButton("Détruire l'idée de la liste", new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialogInterface, int i) {
-                                IdeasManager.removeIdea(idea);
+                                IdeasManager.removeIdea(idea, getActivity());
                             }
                         });
 
@@ -67,5 +68,18 @@ public class MainFragment extends Fragment {
                 dialog.show();
             }
         });
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        Log.d("MainFragment:OnResume", "Resumed");
+
+        try {
+            FloatingActionButton fab = (FloatingActionButton) getActivity().findViewById(R.id.fab);
+            fab.setVisibility(View.VISIBLE);
+        } catch (Exception e) {
+            //woops
+        }
     }
 }

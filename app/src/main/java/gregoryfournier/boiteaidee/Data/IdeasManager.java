@@ -1,8 +1,14 @@
 package gregoryfournier.boiteaidee.Data;
 
+import android.app.Activity;
+import android.support.annotation.NonNull;
 import android.util.Log;
 import android.widget.ArrayAdapter;
+import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -22,7 +28,8 @@ import io.paperdb.Paper;
 public class IdeasManager {
     private static ArrayList<String> allIdeas;
     private static boolean hasBeenInitialized = false;
-    private static final String ALL_IDEAS_DB_STRING = "allIdeas";
+    private static final String ALL_IDEAS_LOCAL_DB_STRING = "allIdeas";
+    private static final String IDEAS_DB_STRING = "Ideas";
     private static ArrayAdapter<String> adapterForChanges;
 
     private IdeasManager() {
@@ -30,52 +37,79 @@ public class IdeasManager {
     }
 
     public static void Init() {
-        //bdeleteAllIdeas();
-        allIdeas = Paper.book().read(ALL_IDEAS_DB_STRING, new ArrayList<String>());
+        //deleteAllIdeas();
+        allIdeas = Paper.book().read(ALL_IDEAS_LOCAL_DB_STRING, new ArrayList<String>());
         Log.d("Paper", "Loaded " + allIdeas.size() + " ideas from storage");
         // Upload to database
-        uploadAllIdeas();
-        //setupRealtimeIdeasDatabase();
+        //uploadAllIdeas();
+        setupRealtimeIdeasDatabase();
         hasBeenInitialized = true;
     }
 
-    public static void addIdea(String newIdea) {
+    public static void addIdea(String newIdea, final Activity activity) {
         if (hasBeenInitialized) {
             allIdeas.add(newIdea);
             Log.d("Paper", "Added " + newIdea + " to local ideas");
-            saveAllIdeas();
+            saveAllIdeas(activity);
         }
             else {
             Log.w("Paper", "Trying to add idea when DB has not been initialized");
         }
     }
 
-    public static void removeIdea(String idea) {
+    public static void removeIdea(String idea, final Activity activity) {
         if (hasBeenInitialized && !allIdeas.isEmpty()) {
             allIdeas.remove(idea);
             Log.d("Paper", "Removed " + idea + " from local ideas");
-            saveAllIdeas();
+            saveAllIdeas(activity); // TODO change upload message to removed message
         } else {
             Log.w("Paper", "Trying to remove idea when DB has not been initialized or is empty");
         }
     }
 
-    public static void saveAllIdeas() {
-        Paper.book().write(ALL_IDEAS_DB_STRING, allIdeas);
-        uploadAllIdeas();
+    public static void saveAllIdeas(final Activity activity) {
+        Paper.book().write(ALL_IDEAS_LOCAL_DB_STRING, allIdeas);
+        uploadAllIdeas(activity);
         Log.d("Paper", "Saved " + allIdeas.size() + " ideas to storage");
     }
 
-    public static void uploadAllIdeas() {
+    public static void uploadAllIdeas(final Activity activity) {
         // Write a message to the database
         FirebaseDatabase database = FirebaseDatabase.getInstance();
-        DatabaseReference myRef = database.getReference("Ideas");
+        DatabaseReference myRef = database.getReference(IDEAS_DB_STRING);
 
-        myRef.setValue(allIdeas);
+        myRef.setValue(allIdeas).addOnCompleteListener(new OnCompleteListener<Void>() {
+            @Override
+            public void onComplete(@NonNull Task<Void> task) {
+                Toast.makeText(activity, "Upload successful", Toast.LENGTH_SHORT).show();
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                Toast.makeText(activity, "Could not backup ideas: " + e.toString(), Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+    public static void uploadallIdeasToBackup(final Activity activity) {
+        FirebaseDatabase database = FirebaseDatabase.getInstance();
+        DatabaseReference myRef = database.getReference(IDEAS_DB_STRING + "BACKUP");
+
+        myRef.setValue(allIdeas).addOnCompleteListener(new OnCompleteListener<Void>() {
+            @Override
+            public void onComplete(@NonNull Task<Void> task) {
+                Toast.makeText(activity, "Upload successful", Toast.LENGTH_SHORT).show();
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                Toast.makeText(activity, "Could not backup ideas: " + e.toString(), Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
     public static void deleteAllIdeas() {
-        Paper.book().write(ALL_IDEAS_DB_STRING, new ArrayList<String>());
+        Paper.book().write(ALL_IDEAS_LOCAL_DB_STRING, new ArrayList<String>());
         Log.d("Paper", "Deleted all ideas from local storage");
     }
 
@@ -95,7 +129,7 @@ public class IdeasManager {
 
     public static void setupRealtimeIdeasDatabase() {
         FirebaseDatabase database = FirebaseDatabase.getInstance();
-        DatabaseReference myRef = database.getReference("Ideas");
+        DatabaseReference myRef = database.getReference(IDEAS_DB_STRING);
 
         // Read from the database
         ValueEventListener valueEventListener = myRef.addValueEventListener(new ValueEventListener() {

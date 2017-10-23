@@ -1,8 +1,11 @@
 package gregoryfournier.boiteaidee;
 
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v7.app.AlertDialog;
+import android.util.Log;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -21,6 +24,7 @@ import io.paperdb.Paper;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
+    FloatingActionButton fab;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,7 +38,7 @@ public class MainActivity extends AppCompatActivity
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+        fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -65,9 +69,10 @@ public class MainActivity extends AppCompatActivity
     }
 
     private void goToNewIdeaFragment() {
+        fab.setVisibility(View.INVISIBLE);
         NewIdeaFragment fragment = new NewIdeaFragment();
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-        transaction.replace(R.id.fragment_container, fragment);
+        transaction.replace(R.id.fragment_container, fragment, "newIdea");
         transaction.addToBackStack(null);
         // Commit the transaction
         transaction.commit();
@@ -88,7 +93,36 @@ public class MainActivity extends AppCompatActivity
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
         } else {
-            super.onBackPressed();
+            final NewIdeaFragment myFragment = (NewIdeaFragment) getSupportFragmentManager().findFragmentByTag("newIdea");
+            if (myFragment != null && myFragment.isVisible()) {
+                if (!myFragment.getNewIdeaEditText().getText().toString().isEmpty()) {
+                    // 1. Instantiate an AlertDialog.Builder with its constructor
+                    AlertDialog.Builder builder = new AlertDialog.Builder(this);
+
+                    // 2. Chain together various setter methods to set the dialog characteristics
+                    builder.setMessage("Are you sure you want to stop adding a new idea?")
+                            .setTitle("Abandoning Idea :(");
+
+                    builder.setPositiveButton("Fuck this idea", new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int id) {
+                            myFragment.getNewIdeaEditText().getText().clear();
+                            onBackPressed();
+                        }
+                    });
+                    builder.setNegativeButton("Nah, I like it finally", new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int id) {
+                            // User cancelled the dialog
+                        }
+                    });
+                    // 3. Get the AlertDialog from create()
+                    AlertDialog dialog = builder.create();
+                    dialog.show();
+                } else {
+                    super.onBackPressed();
+                }
+            } else {
+                super.onBackPressed();
+            }
         }
     }
 
@@ -122,15 +156,13 @@ public class MainActivity extends AppCompatActivity
 
         if (id == R.id.nav_idea_list) {
             goToIdeaListFragment();
-        } else if (id == R.id.nav_gallery) {
-
-        } else if (id == R.id.nav_slideshow) {
+        } else if (id == R.id.nav_backup) {
+            IdeasManager.uploadallIdeasToBackup(this);
+        } else if (id == R.id.nav_idea_meta) {
 
         } else if (id == R.id.nav_manage) {
 
         } else if (id == R.id.nav_share) {
-
-        } else if (id == R.id.nav_send) {
 
         }
 
@@ -139,5 +171,12 @@ public class MainActivity extends AppCompatActivity
         return true;
     }
 
-
+    @Override
+    protected void onResume() {
+        super.onResume();
+        Log.d("MainActivity:OnResume", "Resumed");
+        if (fab != null) {
+            fab.setVisibility(View.VISIBLE);
+        }
+    }
 }

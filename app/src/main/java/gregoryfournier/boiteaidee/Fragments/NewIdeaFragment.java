@@ -53,11 +53,17 @@ public class NewIdeaFragment extends Fragment {
 
                 // add the idea
                 String idea = NewIdeaEditText.getText().toString();
-                IdeasManager.addIdea(idea);
+                IdeasManager.addIdea(idea, getActivity());
 
                 // End Activity
                 getActivity().onBackPressed();
             }
         });
     }
+
+    public EditText getNewIdeaEditText() {
+        return NewIdeaEditText;
+    }
+
+
 }

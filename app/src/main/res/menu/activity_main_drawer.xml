@@ -7,9 +7,9 @@
             android:icon="@drawable/ic_menu_slideshow"
             android:title="@string/drawer_idea_list" />
         <item
-            android:id="@+id/nav_gallery"
+            android:id="@+id/nav_idea_meta"
             android:icon="@drawable/ic_menu_gallery"
-            android:title="Gallery" />
+            android:title="Idées pour la boîte à idée (full meta tsé wow)" />
         <item
             android:id="@+id/nav_slideshow"
             android:icon="@drawable/ic_menu_slideshow"
@@ -27,9 +27,9 @@
                 android:icon="@drawable/ic_menu_share"
                 android:title="Share" />
             <item
-                android:id="@+id/nav_send"
+                android:id="@+id/nav_backup"
                 android:icon="@drawable/ic_menu_send"
-                android:title="Send" />
+                android:title="Backup Ideas (dev)" />
         </menu>
     </item>
 
