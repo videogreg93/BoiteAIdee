@@ -15,6 +15,7 @@ import android.widget.Button;
 import android.widget.EditText;
 
 import gregoryfournier.boiteaidee.Data.IdeasManager;
+import gregoryfournier.boiteaidee.MainActivity;
 import gregoryfournier.boiteaidee.R;
 
 /**
@@ -80,7 +81,7 @@ public class NewIdeaFragment extends Fragment {
                 IdeasManager.addIdea(idea, getActivity());
 
                 // End Activity
-                getActivity().onBackPressed();
+                ((MainActivity)getActivity()).superBackPress();
             }
         });
     }
