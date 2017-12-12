@@ -5,6 +5,8 @@ import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -42,6 +44,28 @@ public class NewIdeaFragment extends Fragment {
         // Get the views
         addNewIdeaButton = (Button) getActivity().findViewById(R.id.bAddNewIdea);
         NewIdeaEditText = (EditText) getActivity().findViewById(R.id.etNewIdea);
+
+        addNewIdeaButton.setEnabled(false);
+
+        // add an editText listener to assure the idea is valid
+
+        NewIdeaEditText.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                addNewIdeaButton.setEnabled(!s.toString().isEmpty());
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+
+            }
+        });
 
         addNewIdeaButton.setOnClickListener(new View.OnClickListener() {
             @Override
