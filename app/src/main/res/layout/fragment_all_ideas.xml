@@ -4,10 +4,23 @@
     android:layout_height="match_parent"
     tools:context="gregoryfournier.boiteaidee.Fragments.AllIdeasFragment">
 
-    <!-- TODO: Update blank fragment layout -->
-    <ListView
-        android:id="@+id/lvAllIdeas"
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+        <Button
+            android:id="@+id/bAllItemsDelete"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Delete selected items"
+            />
+        <ListView
+            android:id="@+id/lvAllIdeas"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+    </LinearLayout>
+
+
+
 
 </FrameLayout>

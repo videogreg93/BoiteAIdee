@@ -19,6 +19,7 @@ import com.google.firebase.database.ValueEventListener;
 import java.util.ArrayList;
 import java.util.Random;
 
+import gregoryfournier.boiteaidee.Fragments.ListIdeaAdapter;
 import io.paperdb.Paper;
 
 /**
@@ -30,7 +31,7 @@ public class IdeasManager {
     private static boolean hasBeenInitialized = false;
     private static final String ALL_IDEAS_LOCAL_DB_STRING = "allIdeas";
     private static final String IDEAS_DB_STRING = "Ideas";
-    private static ArrayAdapter<String> adapterForChanges;
+    private static ListIdeaAdapter adapterForChanges;
 
     private IdeasManager() {
 
@@ -152,7 +153,7 @@ public class IdeasManager {
         });
     }
 
-    public static void setAdapterForChanges(ArrayAdapter<String> adapterForChanges) {
+    public static void setAdapterForChanges(ListIdeaAdapter adapterForChanges) {
         IdeasManager.adapterForChanges = adapterForChanges;
     }
 }
