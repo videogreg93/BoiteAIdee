@@ -16,6 +16,8 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
+
 import gregoryfournier.boiteaidee.Data.IdeasManager;
 import gregoryfournier.boiteaidee.Fragments.AllIdeasFragment;
 import gregoryfournier.boiteaidee.Fragments.MainFragment;
@@ -54,6 +56,13 @@ public class MainActivity extends AppCompatActivity
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
+
+        // Setup Authentification
+        // Configure Google Sign In
+        GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                .requestIdToken(getString(R.string.OAuthWebKey))
+                .requestEmail()
+                .build();
 
         // Load Main Content
         goToMainFragment();
