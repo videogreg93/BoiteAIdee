@@ -11,7 +11,8 @@
     <string name="votre_idee_new_idea">Votre idée</string>
     <string name="ajouter_idee_new_idea">Ajouter L\'idée</string>
     <string name="main_button">Trouver une Idée!</string>
-    <string name="drawer_idea_list">Voire liste d\'idées</string>
+    <string name="drawer_idea_list">Voire tous vos d\'idées</string>
     <string name="OAuthWebKey">1024843667204-t6jj0vggkrhvj4ico7ja4206d6qqq44m.apps.googleusercontent.com</string>
     <string name="new_idea_category">Catégory</string>
+    <string name="drawer_my_idea">Regarder vos idées</string>
 </resources>

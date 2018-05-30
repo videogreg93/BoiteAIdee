@@ -28,10 +28,13 @@ import gregoryfournier.boiteaidee.R;
  * A simple {@link Fragment} subclass.
  */
 public class AllIdeasFragment extends Fragment {
+    public static final String ONLY_USER_IDEAS = "ONLY_USER_IDEAS" ;
     // Views
     ListView allIdeas;
     Button bDeleteItems;
     Spinner filterSpinner;
+
+    boolean showOnlyUserIdeas = false;
 
 
 
@@ -51,6 +54,12 @@ public class AllIdeasFragment extends Fragment {
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
+
+        // Get bundle data
+        Bundle bundle = this.getArguments();
+        if (bundle != null) {
+            showOnlyUserIdeas = bundle.getBoolean(ONLY_USER_IDEAS, false);
+        }
 
         // Get the Views
         allIdeas = (ListView) getActivity().findViewById(R.id.lvAllIdeas);
@@ -77,7 +86,7 @@ public class AllIdeasFragment extends Fragment {
         });
 
        // ArrayAdapter<String> ideaAdapter = new ArrayAdapter<String>(getContext(),android.R.layout.simple_list_item_1, IdeasManager.getAllIdeas());
-        final ListIdeaAdapter ideaAdapter = new ListIdeaAdapter(getContext(),R.layout.list_item_adapter_layout, IdeasManager.getAllIdeas(), allIdeas);
+        final ListIdeaAdapter ideaAdapter = new ListIdeaAdapter(getContext(),R.layout.list_item_adapter_layout, IdeasManager.getAllIdeas(), allIdeas, showOnlyUserIdeas);
         allIdeas.setAdapter(ideaAdapter);
         allIdeas.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
             @Override

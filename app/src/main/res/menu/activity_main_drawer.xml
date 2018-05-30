@@ -3,21 +3,13 @@
 
     <group android:checkableBehavior="single">
         <item
-            android:id="@+id/nav_idea_list"
+            android:id="@+id/drawer_all_idea_list"
             android:icon="@drawable/ic_menu_slideshow"
             android:title="@string/drawer_idea_list" />
         <item
-            android:id="@+id/nav_idea_meta"
+            android:id="@+id/drawer_my_idea_list"
             android:icon="@drawable/ic_menu_gallery"
-            android:title="Idées pour la boîte à idée (full meta tsé wow)" />
-        <item
-            android:id="@+id/nav_slideshow"
-            android:icon="@drawable/ic_menu_slideshow"
-            android:title="Slideshow" />
-        <item
-            android:id="@+id/nav_manage"
-            android:icon="@drawable/ic_menu_manage"
-            android:title="Tools" />
+            android:title="@string/drawer_my_idea" />
     </group>
 
     <item android:title="Communicate">
@@ -25,7 +17,7 @@
             <item
                 android:id="@+id/nav_share"
                 android:icon="@drawable/ic_menu_share"
-                android:title="Share" />
+                android:title="Partager une liste" />
             <item
                 android:id="@+id/nav_backup"
                 android:icon="@drawable/ic_menu_send"

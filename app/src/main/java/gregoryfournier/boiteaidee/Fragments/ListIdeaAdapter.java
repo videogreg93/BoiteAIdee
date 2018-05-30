@@ -15,6 +15,9 @@ import android.widget.Filterable;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.google.android.gms.auth.api.signin.GoogleSignIn;
+import com.google.firebase.auth.FirebaseAuth;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -31,16 +34,18 @@ public class ListIdeaAdapter extends ArrayAdapter<Idea> implements Filterable {
     private List<Idea> filteredData = new ArrayList<>();
     private List<Idea> originalData = null;
     private IdeaFilter filter = new IdeaFilter();
+    private boolean showOnlyUserIdeas;
 
     private ListView parentList;
 
     // for checkboxes
     HashMap<Integer,Boolean> isChecked = new HashMap<>();
 
-    public ListIdeaAdapter(@NonNull Context context, @LayoutRes int resource, @NonNull List<Idea> objects, ListView parent) {
+    public ListIdeaAdapter(@NonNull Context context, @LayoutRes int resource, @NonNull List<Idea> objects, ListView parent, boolean onlyUser) {
         super(context, resource, objects);
         originalData = objects;
         parentList = parent;
+        showOnlyUserIdeas = onlyUser;
     }
 
     @NonNull
@@ -110,19 +115,20 @@ public class ListIdeaAdapter extends ArrayAdapter<Idea> implements Filterable {
 
             if (constraint.equals("ALL")) {
                 filteredData = originalData;
+                if (showOnlyUserIdeas)
+                    removeOtherUsersIdeas(filteredData);
                 results.values = list;
                 results.count = list.size();
                 return results;
             }
-
 
             for (Idea idea : list) {
                 if (idea.getCategory().toString().contentEquals(constraint)) {
                     filteredData.add(idea);
                 }
             }
-
-
+            if (showOnlyUserIdeas)
+                removeOtherUsersIdeas(filteredData);
             results.values = filteredData;
             results.count = filteredData.size();
 
@@ -135,5 +141,21 @@ public class ListIdeaAdapter extends ArrayAdapter<Idea> implements Filterable {
             filteredData = (ArrayList<Idea>) results.values;
             notifyDataSetChanged();
         }
+    }
+
+    private void removeOtherUsersIdeas(List<Idea> ideas) {
+        try {
+            String user = FirebaseAuth.getInstance().getCurrentUser().getDisplayName();
+            for (int i = 0; i <ideas.size(); i++) {
+                Idea idea = ideas.get(i);
+                if (idea.getAuthor().equals(user)) {
+                    ideas.remove(idea);
+                    i = Math.max(0, i - 1);
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
     }
 }
