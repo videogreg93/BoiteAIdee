@@ -23,9 +23,7 @@ import gregoryfournier.boiteaidee.Data.IdeasManager;
 import gregoryfournier.boiteaidee.MainActivity;
 import gregoryfournier.boiteaidee.R;
 
-/**
- * A simple {@link Fragment} subclass.
- */
+
 public class NewIdeaFragment extends Fragment {
     Button addNewIdeaButton;
     EditText NewIdeaEditText;

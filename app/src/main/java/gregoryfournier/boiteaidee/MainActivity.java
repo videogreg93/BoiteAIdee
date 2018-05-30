@@ -90,13 +90,10 @@ public class MainActivity extends AppCompatActivity
 
     private void goToIdeaListFragment() {
         AllIdeasFragment fragment = new AllIdeasFragment();
+        fab.setVisibility(View.VISIBLE);
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
         transaction.replace(R.id.fragment_container, fragment);
         transaction.addToBackStack(null);
-        for (Idea idea: IdeasManager.getAllIdeas()) {
-            System.out.println(idea);
-        }
-
         // Commit the transaction
         transaction.commit();
     }

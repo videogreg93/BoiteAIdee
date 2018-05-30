@@ -8,9 +8,9 @@ import java.util.Objects;
  */
 
 public class Idea {
-    String idea;
-    String author;
-    CATEGORY category;
+    private String idea;
+    private String author;
+    private CATEGORY category;
 
     public Idea() {
         idea = "Empty Idea";
@@ -70,9 +70,13 @@ public class Idea {
         return Objects.hash(idea, author, category);
     }
 
+    /**
+     * Enum to define idea categories
+     */
     public enum CATEGORY {
         NONE,
         FOOD,
-        ACTIVITY
+        ACTIVITY,
+        MOVIE
     }
 }

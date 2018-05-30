@@ -44,6 +44,12 @@ public class IdeasManager {
         setupRealtimeIdeasDatabase();
     }
 
+    /**
+     * Uploads an idea to the database. Database callbacks will ensure that
+     * the new data is reflected locally
+     * @param newIdea Idea to be added
+     * @param activity The calling activity. This is to show a toast upon success
+     */
     public static void addIdea(Idea newIdea, final Activity activity) {
         if (hasBeenInitialized) {
             // Upload idea to firebase. The callback will add it locally
@@ -66,6 +72,12 @@ public class IdeasManager {
         }
     }
 
+    /**
+     * Remove idea from the database. Database callback will
+     * ensure that the changes are reflected locally.
+     * @param idea Idea to be removed
+     * @param activity The calling activity. This is to show a toast upon success
+     */
     public static void removeIdea(final Idea idea, final Activity activity) {
         if (hasBeenInitialized && !allIdeas.isEmpty()) {
 
@@ -76,6 +88,10 @@ public class IdeasManager {
     }
 
 
+    /**
+     * Uploads all ideas to a backup database
+     * @param activity The calling activity. This is to show a toast upon success
+     */
     public static void uploadallIdeasToBackup(final Activity activity) {
         FirebaseDatabase database = FirebaseDatabase.getInstance();
         DatabaseReference myRef = database.getReference(IDEAS_DB_STRING + "BACKUP");
@@ -93,6 +109,10 @@ public class IdeasManager {
         });
     }
 
+    /**
+     * Get a random idea. User story.
+     * @return The random idea
+     */
     public static Idea getRandomIdea() {
         if (hasBeenInitialized && !allIdeas.isEmpty()) {
             Random random = new Random();
@@ -107,7 +127,10 @@ public class IdeasManager {
         return allIdeas;
     }
 
-    public static void setupRealtimeIdeasDatabase() {
+    /**
+     * Adds the callbacks for data changes. Handles data being added, removed and changed.
+     */
+    private static void setupRealtimeIdeasDatabase() {
         FirebaseDatabase database = FirebaseDatabase.getInstance();
         DatabaseReference myRef = database.getReference(IDEAS_DB_STRING);
 
@@ -147,6 +170,11 @@ public class IdeasManager {
         hasBeenInitialized = true;
     }
 
+    /**
+     * Must be called so that the listView in the allIdea view can be
+     * made aware of data changes
+     * @param adapterForChanges adapter that handles data in the listview
+     */
     public static void setAdapterForChanges(ListIdeaAdapter adapterForChanges) {
         IdeasManager.adapterForChanges = adapterForChanges;
     }

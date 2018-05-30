@@ -15,6 +15,8 @@ import android.widget.CheckBox;
 import android.widget.ListView;
 import android.widget.Spinner;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Dictionary;
 import java.util.HashMap;
 
@@ -94,10 +96,15 @@ public class AllIdeasFragment extends Fragment {
 
         // Populate filter spinner
         // Populate the spinner with the categories
-        final ArrayAdapter<Idea.CATEGORY> spinnerAdapter = new ArrayAdapter<Idea.CATEGORY>(
+        final String[] spinnerValues = new String[Idea.CATEGORY.values().length + 1];
+        spinnerValues[0] = "ALL";
+        for (int i = 0; i < Idea.CATEGORY.values().length; i++) {
+            spinnerValues[i+1] = Idea.CATEGORY.values()[i].toString();
+        }
+        final ArrayAdapter<String> spinnerAdapter = new ArrayAdapter<String>(
                 getActivity(),
                 android.R.layout.simple_spinner_item,
-                Idea.CATEGORY.values()
+                spinnerValues
         );
 
         spinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
@@ -107,7 +114,7 @@ public class AllIdeasFragment extends Fragment {
         filterSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                String category = Idea.CATEGORY.values()[position].toString();
+                String category = spinnerValues[position];
                 ideaAdapter.getFilter().filter(category);
             }
 
