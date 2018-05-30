@@ -113,10 +113,22 @@ public class IdeasManager {
      * Get a random idea. User story.
      * @return The random idea
      */
-    public static Idea getRandomIdea() {
+    public static Idea getRandomIdea(int indexFilter) {
         if (hasBeenInitialized && !allIdeas.isEmpty()) {
             Random random = new Random();
-            return allIdeas.get(random.nextInt(allIdeas.size()));
+            ArrayList<Idea> possibleIdeas = new ArrayList<>();
+            if (indexFilter == 0) {
+                possibleIdeas = allIdeas;
+            } else {
+                Idea.CATEGORY category = Idea.CATEGORY.values()[indexFilter-1];
+                for (Idea i : allIdeas) {
+                    if (i.getCategory().equals(category))
+                        possibleIdeas.add(i);
+                }
+            }
+            if (possibleIdeas.isEmpty())
+                return null;
+            return possibleIdeas.get(random.nextInt(possibleIdeas.size()));
         } else {
             Log.d("firebase", "Trying to get idea when DB has not been initialized or is empty");
             return new Idea();

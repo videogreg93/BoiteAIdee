@@ -77,6 +77,7 @@ public class Idea {
         NONE,
         FOOD,
         ACTIVITY,
-        MOVIE
+        MOVIE,
+        SPORT
     }
 }
