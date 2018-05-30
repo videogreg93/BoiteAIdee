@@ -9,13 +9,16 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.ListView;
+import android.widget.Spinner;
 
 import java.util.Dictionary;
 import java.util.HashMap;
 
+import gregoryfournier.boiteaidee.Data.Idea;
 import gregoryfournier.boiteaidee.Data.IdeasManager;
 import gregoryfournier.boiteaidee.R;
 
@@ -26,6 +29,7 @@ public class AllIdeasFragment extends Fragment {
     // Views
     ListView allIdeas;
     Button bDeleteItems;
+    Spinner filterSpinner;
 
 
 
@@ -49,6 +53,7 @@ public class AllIdeasFragment extends Fragment {
         // Get the Views
         allIdeas = (ListView) getActivity().findViewById(R.id.lvAllIdeas);
         bDeleteItems = (Button) getActivity().findViewById(R.id.bAllItemsDelete);
+        filterSpinner = (Spinner) getActivity().findViewById(R.id.all_ideas_filter_spinner);
 
         // Setup delete button
         bDeleteItems.setVisibility(View.INVISIBLE);
@@ -78,8 +83,8 @@ public class AllIdeasFragment extends Fragment {
                 //((ListIdeaAdapter)allIdeas.getAdapter()).showCheckboxes = true;
                 //ideaAdapter.notifyDataSetChanged();
                 //bDeleteItems.setVisibility(View.VISIBLE);
-                // TODO this is hack just to be bale to delete items
-                String idea = (String) ideaAdapter.getItem(position);
+                // TODO this is hack just to be able to delete items
+                Idea idea = (Idea) ideaAdapter.getItem(position);
                 Log.d("allItemsView","removing " + idea);
                 IdeasManager.removeIdea(idea, getActivity());
                 allIdeas.removeView(view);
@@ -89,6 +94,31 @@ public class AllIdeasFragment extends Fragment {
 
         // make it so the list updates when new ideas come in
         IdeasManager.setAdapterForChanges(ideaAdapter);
+
+        // Populate filter spinner
+        // Populate the spinner with the categories
+        final ArrayAdapter<Idea.CATEGORY> spinnerAdapter = new ArrayAdapter<Idea.CATEGORY>(
+                getActivity(),
+                android.R.layout.simple_spinner_item,
+                Idea.CATEGORY.values()
+        );
+
+        spinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        filterSpinner.setAdapter(spinnerAdapter);
+
+        // Filter listview when filterSpinner changes value
+        filterSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                String category = Idea.CATEGORY.values()[position].toString();
+                ideaAdapter.getFilter().filter(category);
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+                ideaAdapter.getFilter().filter("ALL");
+            }
+        });
     }
 
 

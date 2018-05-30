@@ -11,9 +11,14 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Spinner;
 
+import com.google.android.gms.auth.api.signin.GoogleSignIn;
+
+import gregoryfournier.boiteaidee.Data.Idea;
 import gregoryfournier.boiteaidee.Data.IdeasManager;
 import gregoryfournier.boiteaidee.MainActivity;
 import gregoryfournier.boiteaidee.R;
@@ -24,6 +29,7 @@ import gregoryfournier.boiteaidee.R;
 public class NewIdeaFragment extends Fragment {
     Button addNewIdeaButton;
     EditText NewIdeaEditText;
+    Spinner categorySpinner;
 
 
     public NewIdeaFragment() {
@@ -45,6 +51,7 @@ public class NewIdeaFragment extends Fragment {
         // Get the views
         addNewIdeaButton = (Button) getActivity().findViewById(R.id.bAddNewIdea);
         NewIdeaEditText = (EditText) getActivity().findViewById(R.id.etNewIdea);
+        categorySpinner = (Spinner) getActivity().findViewById(R.id.spNewIdeaCategory);
 
         addNewIdeaButton.setEnabled(false);
 
@@ -77,14 +84,35 @@ public class NewIdeaFragment extends Fragment {
                         InputMethodManager.HIDE_NOT_ALWAYS);
 
                 // add the idea
-                String idea = NewIdeaEditText.getText().toString();
+                String message = NewIdeaEditText.getText().toString();
+                String author = "N/A";
+                try {
+                    author = GoogleSignIn.getLastSignedInAccount(getActivity()).getDisplayName();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+                Idea.CATEGORY category = (Idea.CATEGORY) categorySpinner.getSelectedItem();
+                Idea idea = new Idea(message,author,category);
+
                 IdeasManager.addIdea(idea, getActivity());
 
                 // End Activity
-                ((MainActivity)getActivity()).superBackPress();
+                ((MainActivity) getActivity()).superBackPress();
             }
         });
+
+        // Populate the spinner with the categories
+        ArrayAdapter<Idea.CATEGORY> spinnerAdapter = new ArrayAdapter<Idea.CATEGORY>(
+                getActivity(),
+                android.R.layout.simple_spinner_item,
+                Idea.CATEGORY.values()
+        );
+
+        spinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        categorySpinner.setAdapter(spinnerAdapter);
+
     }
+
 
     public EditText getNewIdeaEditText() {
         return NewIdeaEditText;

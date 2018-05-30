@@ -13,6 +13,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 
+import gregoryfournier.boiteaidee.Data.Idea;
 import gregoryfournier.boiteaidee.Data.IdeasManager;
 import gregoryfournier.boiteaidee.R;
 
@@ -45,18 +46,18 @@ public class MainFragment extends Fragment {
         mainButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                final String idea = IdeasManager.getRandomIdea();
+                final Idea idea = IdeasManager.getRandomIdea();
                 // 1. Instantiate an AlertDialog.Builder with its constructor
                 AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
 
                 // 2. Chain together various setter methods to set the dialog characteristics
-                builder.setMessage(idea)
+                builder.setMessage(idea.getIdea())
                         .setTitle("Votre activité!")
                 .setPositiveButton("Parfait", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
                         dialog.dismiss();
                     }
-                }).setNegativeButton("Détruire l'idée de la liste", new DialogInterface.OnClickListener() {
+                }).setNegativeButton("Retirer l'idée de la liste", new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialogInterface, int i) {
                                 IdeasManager.removeIdea(idea, getActivity());

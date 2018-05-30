@@ -18,6 +18,7 @@ import android.view.MenuItem;
 
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 
+import gregoryfournier.boiteaidee.Data.Idea;
 import gregoryfournier.boiteaidee.Data.IdeasManager;
 import gregoryfournier.boiteaidee.Fragments.AllIdeasFragment;
 import gregoryfournier.boiteaidee.Fragments.MainFragment;
@@ -92,6 +93,10 @@ public class MainActivity extends AppCompatActivity
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
         transaction.replace(R.id.fragment_container, fragment);
         transaction.addToBackStack(null);
+        for (Idea idea: IdeasManager.getAllIdeas()) {
+            System.out.println(idea);
+        }
+
         // Commit the transaction
         transaction.commit();
     }
