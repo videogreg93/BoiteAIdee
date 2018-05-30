@@ -66,11 +66,9 @@ public class IdeasManager {
         }
     }
 
-    public static void removeIdea(Idea idea, final Activity activity) {
+    public static void removeIdea(final Idea idea, final Activity activity) {
         if (hasBeenInitialized && !allIdeas.isEmpty()) {
-            //allIdeas.remove(idea);
-            //Log.d("Paper", "Removed " + idea + " from local ideas");
-            //saveAllIdeas(activity);
+
             // TODO Actually implement removal in a non hacky way
         } else {
             Log.w("Paper", "Trying to remove idea when DB has not been initialized or is empty");

@@ -75,19 +75,16 @@ public class AllIdeasFragment extends Fragment {
         });
 
        // ArrayAdapter<String> ideaAdapter = new ArrayAdapter<String>(getContext(),android.R.layout.simple_list_item_1, IdeasManager.getAllIdeas());
-        final ListIdeaAdapter ideaAdapter = new ListIdeaAdapter(getContext(),R.layout.list_item_adapter_layout, IdeasManager.getAllIdeas());
+        final ListIdeaAdapter ideaAdapter = new ListIdeaAdapter(getContext(),R.layout.list_item_adapter_layout, IdeasManager.getAllIdeas(), allIdeas);
         allIdeas.setAdapter(ideaAdapter);
         allIdeas.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
             @Override
             public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
-                //((ListIdeaAdapter)allIdeas.getAdapter()).showCheckboxes = true;
-                //ideaAdapter.notifyDataSetChanged();
-                //bDeleteItems.setVisibility(View.VISIBLE);
                 // TODO this is hack just to be able to delete items
                 Idea idea = (Idea) ideaAdapter.getItem(position);
                 Log.d("allItemsView","removing " + idea);
                 IdeasManager.removeIdea(idea, getActivity());
-                allIdeas.removeView(view);
+                //allIdeas.removeView(view);
                 return false;
             }
         });

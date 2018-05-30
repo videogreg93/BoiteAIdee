@@ -4,6 +4,7 @@ import android.content.Context;
 import android.support.annotation.LayoutRes;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,6 +12,7 @@ import android.widget.ArrayAdapter;
 import android.widget.CheckBox;
 import android.widget.Filter;
 import android.widget.Filterable;
+import android.widget.ListView;
 import android.widget.TextView;
 
 import java.util.ArrayList;
@@ -26,16 +28,19 @@ import gregoryfournier.boiteaidee.R;
 
 public class ListIdeaAdapter extends ArrayAdapter<Idea> implements Filterable {
     boolean showCheckboxes = false;
-    private List<Idea> filteredData = null;
+    private List<Idea> filteredData = new ArrayList<>();
     private List<Idea> originalData = null;
     private IdeaFilter filter = new IdeaFilter();
+
+    private ListView parentList;
 
     // for checkboxes
     HashMap<Integer,Boolean> isChecked = new HashMap<>();
 
-    public ListIdeaAdapter(@NonNull Context context, @LayoutRes int resource, @NonNull List<Idea> objects) {
+    public ListIdeaAdapter(@NonNull Context context, @LayoutRes int resource, @NonNull List<Idea> objects, ListView parent) {
         super(context, resource, objects);
         originalData = objects;
+        parentList = parent;
     }
 
     @NonNull
@@ -73,14 +78,38 @@ public class ListIdeaAdapter extends ArrayAdapter<Idea> implements Filterable {
         this.isChecked.put(index, isChecked);
     }
 
+    @NonNull
+    @Override
+    public Filter getFilter() {
+        return this.filter;
+    }
+
+    @Nullable
+    @Override
+    public Idea getItem(int position) {
+        return filteredData.get(position);
+    }
+
+    @Override
+    public int getCount() {
+        return filteredData.size();
+    }
+
+    @Override
+    public void notifyDataSetChanged() {
+        super.notifyDataSetChanged();
+        parentList.invalidateViews();
+    }
+
     private class IdeaFilter extends Filter {
         @Override
         protected FilterResults performFiltering(CharSequence constraint) {
             final List<Idea> list = originalData;
-            List<Idea> newList = new ArrayList<>();
+            filteredData = new ArrayList<>();
             FilterResults results = new FilterResults();
 
             if (constraint.equals("ALL")) {
+                filteredData = originalData;
                 results.values = list;
                 results.count = list.size();
                 return results;
@@ -88,14 +117,14 @@ public class ListIdeaAdapter extends ArrayAdapter<Idea> implements Filterable {
 
 
             for (Idea idea : list) {
-                if (idea.getCategory().toString().equals(constraint)) {
-                    newList.add(idea);
+                if (idea.getCategory().toString().contentEquals(constraint)) {
+                    filteredData.add(idea);
                 }
             }
 
 
-            results.values = newList;
-            results.count = newList.size();
+            results.values = filteredData;
+            results.count = filteredData.size();
 
             return results;
 
