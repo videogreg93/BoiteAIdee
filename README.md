@@ -3,7 +3,7 @@ Application Android Boite a Idée
 
 # Upcoming Feature list
 * Delete ideas from the main list
-* Add categories to sort the different types
+* [x] Add categories to sort the different types
   * Movies
   * Restos
   * Night out
